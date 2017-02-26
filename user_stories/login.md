@@ -5,3 +5,5 @@ When a user opens the appliation, they are presented with a login screen that pr
 Should the user not have the Uber app, they will be redirected to a webpage that will have them login to their uber app and accept the permissions.
 
 Should the user fail to complete the login procedure they will be presented with the same login button that they started with.
+
+![Login Diagram](/img/login_uml.png)
