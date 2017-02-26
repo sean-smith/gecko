@@ -1,4 +1,4 @@
-Summary View
+#Summary View
 
 As a logged in user, I want to access a summary of my trips over the past week/month/year so that I may better understand the impact of 
 Uber in my life and the environment. When the user is successfully logged in, they will be presented with the home page, (see [home page](home.md)) 
