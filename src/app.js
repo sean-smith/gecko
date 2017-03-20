@@ -10,14 +10,28 @@ nunjucks.configure('pages', {
 
 var info; 
 var infoMPG;
-var request = require('request');
+//var request = require('request');
 
+//REQUEST-PROMISE MODULE
+const request = require('request-promise');
 var year = '2012';
 var make = 'toyota';
 var model = 'corolla';
 var requestsSatisfied = 0;
 var urlString = 'http://www.fueleconomy.gov/ws/rest/vehicle/menu/options?year=' + year + '&make=' + make + '&model=' + model;
 
+
+const options = {  
+  method: 'GET',
+  uri: 'http://www.fueleconomy.gov/ws/rest/vehicle/menu/options',
+  qs: {
+    year: '2012',
+    make: 'honda',
+    model: 'fit',
+  },
+  json: true
+}
+/*
 request({url: urlString, json: true}, function (error, res, json) {
     if (!error) {
       info = json;
@@ -43,9 +57,17 @@ if(requestsSatisfied > 0){
 
 	console.log(infoMPG);
 }
-
+*/
 app.get('/', function (req, res) {
-  res.render('index.html')
+	request(options)
+		.then((cars) => {
+			res.render('index.html',{cars: cars})
+	})
+		.catch((err) => {
+			console.log(err)
+			res.render('error')
+		})
+  //res.render('index.html')
 })
 
 app.get('/search', function(req, res) {
