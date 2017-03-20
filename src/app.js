@@ -9,11 +9,28 @@ nunjucks.configure('pages', {
 })
 
 app.get('/', function (req, res) {
-  res.send('Hello World!')
+  res.render('index.html')
 })
 
-app.get('/home', function(req, res) {
-	res.render('index.njk')
+app.get('/search', function(req, res) {
+
+	var year = req.query.year;
+	var make = req.query.make;
+	var model = req.query.model;
+
+	cars = [
+		{
+			name: "Fiat"
+		}, 
+		{
+			name: "Chrysler"
+		},
+		{
+			name: "Ferrari"
+		}
+	];
+
+	res.render('index.html', { cars: JSON.stringify(cars, null, 4), year: year, make: make, model: model } )
 })
 
 app.listen(3000, function () {
