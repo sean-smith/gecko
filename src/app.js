@@ -31,6 +31,53 @@ const options = {
   },
   json: true
 }
+
+app.get('/', function (req, res) {
+  res.render('index.html')
+})
+
+app.get('/search', function(req, res) {
+
+	var year = req.query.year;
+	var make = req.query.make;
+	var model = req.query.model;
+
+	options.qs.year = year;
+	options.qs.make = make;
+	options.qs.model = model;
+
+	console.log(options);
+
+
+	request(options)
+		.then((cars) => {
+			res.render('index.html', { cars: JSON.stringify(cars, null, 4), year: year, make: make, model: model })
+	})
+	.catch((err) => {
+		console.log(err)
+		res.send('error in request')
+	})
+
+	cars = [
+		{
+			name: "Fiat"
+		}, 
+		{
+			name: "Chrysler"
+		},
+		{
+			name: "Ferrari"
+		}
+	];
+
+	// res.render('index.html', { cars: JSON.stringify(cars, null, 4), year: year, make: make, model: model } )
+})
+
+
+app.listen(3000, function () {
+  console.log('Example app listening on port 3000!');
+})
+
 /*
 request({url: urlString, json: true}, function (error, res, json) {
     if (!error) {
@@ -58,43 +105,4 @@ if(requestsSatisfied > 0){
 	console.log(infoMPG);
 }
 */
-app.get('/', function (req, res) {
-	request(options)
-		.then((cars) => {
-			res.render('index.html',{cars: cars})
-	})
-		.catch((err) => {
-			console.log(err)
-			res.render('error')
-		})
-  //res.render('index.html')
-})
-
-app.get('/search', function(req, res) {
-
-	var year = req.query.year;
-	var make = req.query.make;
-	var model = req.query.model;
-
-	cars = [
-		{
-			name: "Fiat"
-		}, 
-		{
-			name: "Chrysler"
-		},
-		{
-			name: "Ferrari"
-		}
-	];
-
-	res.render('index.html', { cars: JSON.stringify(cars, null, 4), year: year, make: make, model: model } )
-})
-
-
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
-})
-
-
 
