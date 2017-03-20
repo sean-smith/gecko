@@ -1,6 +1,9 @@
 var express = require('express')
 var nunjucks = require('nunjucks')
+var request = require('request-promise');
 var app = express()
+
+var mpg_url = "http://www.fueleconomy.gov/ws/rest/ympg/shared/ympgVehicle/";
 
 // Configure Templating Engine Nunjucks
 nunjucks.configure('pages', {
@@ -8,29 +11,25 @@ nunjucks.configure('pages', {
     express: app
 })
 
-var info; 
-var infoMPG;
-//var request = require('request');
 
 //REQUEST-PROMISE MODULE
-const request = require('request-promise');
-var year = '2012';
-var make = 'toyota';
-var model = 'corolla';
-var requestsSatisfied = 0;
-var urlString = 'http://www.fueleconomy.gov/ws/rest/vehicle/menu/options?year=' + year + '&make=' + make + '&model=' + model;
-
-
-const options = {  
+var options = {  
   method: 'GET',
   uri: 'http://www.fueleconomy.gov/ws/rest/vehicle/menu/options',
   qs: {
     year: '2012',
     make: 'honda',
-    model: 'fit',
+    model: 'fit'
   },
   json: true
 }
+
+var mpg_options = {  
+  method: 'GET',
+  uri: '',
+  json: true
+}
+
 
 app.get('/', function (req, res) {
   res.render('index.html')
@@ -46,12 +45,30 @@ app.get('/search', function(req, res) {
 	options.qs.make = make;
 	options.qs.model = model;
 
-	console.log(options);
-
-
 	request(options)
-		.then((cars) => {
-			res.render('index.html', { cars: JSON.stringify(cars, null, 4), year: year, make: make, model: model })
+		.then((models) => {
+
+			if (models == null) {
+				res.render('index.html', {year: year, make: make, model: model });
+				return
+			}
+
+			var id = models.menuItem[0].value;
+
+			mpg_options.uri = mpg_url + id;
+
+			console.log(mpg_options);
+
+			request(mpg_options)
+				.then((mpg) => {
+					res.render('index.html', { models: JSON.stringify(models, null, 4), mpg: JSON.stringify(mpg, null, 4), year: year, make: make, model: model })
+			})
+			.catch((err) => {
+				console.log(err)
+				res.send('error in request')
+			})
+
+			// res.render('index.html', { cars: JSON.stringify(cars, null, 4), year: year, make: make, model: model })
 	})
 	.catch((err) => {
 		console.log(err)
