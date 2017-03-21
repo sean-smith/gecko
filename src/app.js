@@ -53,7 +53,11 @@ app.get('/search', function(req, res) {
 				return
 			}
 
-			var id = models.menuItem[0].value;
+			if (Array.isArray(models.menuItem)) {
+				models.menuItem = models.menuItem[0];
+			}
+
+			var id = models.menuItem.value;
 
 			mpg_options.uri = mpg_url + id;
 
