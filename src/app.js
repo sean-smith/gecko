@@ -30,9 +30,42 @@ var mpg_options = {
   json: true
 }
 
+var MongoClient = require('mongodb').MongoClient
+  , assert = require('assert');
+
+// Connection URL
+var url = 'mongodb://localhost:27017/gecko'
+var db
+
+// Use connect method to connect to the server
+MongoClient.connect(url, function(err, database) {
+  assert.equal(null, err)
+  db = database
+  console.log("Connected successfully to server");
+ 
+  app.listen(3000, function () {
+    console.log('Example app listening on port 3000!');
+  })
+
+})
+
+
+
 
 app.get('/', function (req, res) {
-  res.render('index.html')
+	var data = {
+		year: '2012',
+		make: 'honda',
+		model: 'fit'
+	};
+
+	db.collection('cars').find(data).toArray((err, result) => {
+		if (err) return console.log(err)
+		console.log('here');
+		res.render('index.html', {mpg: JSON.stringify(result, null, 4), year: data.year, make: data.make, model: data.model })
+	});
+
+	//res.render('index.html')
 })
 
 app.get('/search', function(req, res) {
@@ -45,8 +78,14 @@ app.get('/search', function(req, res) {
 	options.qs.make = make;
 	options.qs.model = model;
 
-	request(options)
-		.then((models) => {
+	db.collection('cars').find(req.query).toArray((err, result) => {
+		if (err) return console.log(err)
+		if (result.length > 0) {
+			res.render('index.html', {mpg: JSON.stringify(result, null, 4), year: year, make: make, model: model })
+		}
+		else {
+			request(options)
+			.then((models) => {
 
 			if (models == null) {
 				res.render('index.html', {year: year, make: make, model: model });
@@ -65,6 +104,15 @@ app.get('/search', function(req, res) {
 
 			request(mpg_options)
 				.then((mpg) => {
+					db.collection('cars').insertOne({
+						year: year, 
+						make: make, 
+						model: model, 
+						mpg: mpg
+					}, function(err, r) {
+    					assert.equal(null, err);
+						assert.equal(1, r.insertedCount);
+					});
 					res.render('index.html', { models: JSON.stringify(models, null, 4), mpg: JSON.stringify(mpg, null, 4), year: year, make: make, model: model })
 			})
 			.catch((err) => {
@@ -73,57 +121,15 @@ app.get('/search', function(req, res) {
 			})
 
 			// res.render('index.html', { cars: JSON.stringify(cars, null, 4), year: year, make: make, model: model })
+		})
+		.catch((err) => {
+			console.log(err)
+			res.send('error in request')
+		})
+		} // close else
 	})
-	.catch((err) => {
-		console.log(err)
-		res.send('error in request')
-	})
-
-	cars = [
-		{
-			name: "Fiat"
-		}, 
-		{
-			name: "Chrysler"
-		},
-		{
-			name: "Ferrari"
-		}
-	];
-
-	// res.render('index.html', { cars: JSON.stringify(cars, null, 4), year: year, make: make, model: model } )
 })
 
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
-})
 
-/*
-request({url: urlString, json: true}, function (error, res, json) {
-    if (!error) {
-      info = json;
-	  requestsSatisfied++;
-    }
-	else{
-		console.log('threw error');
-	}
-})
-
-console.log(info);
-
-if(requestsSatisfied > 0){
-	var vehicleId = info.menuItem[0].value;
-
-	var urlStringMPG = 'http://www.fueleconomy.gov/ws/rest/ympg/shared/ympgVehicle/' + vehicleID;
-
-	request({url: urlStringMPG, json: true}, function (error, res, json) {
-    	if (!error) {
-    	  infoMPG = json;
-    	}
-	})
-
-	console.log(infoMPG);
-}
-*/
 
