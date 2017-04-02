@@ -43,29 +43,15 @@ MongoClient.connect(url, function(err, database) {
   db = database
   console.log("Connected successfully to server");
  
-  app.listen(3000, function () {
-    console.log('Example app listening on port 3000!');
+  app.listen(80, function () {
+    console.log('Example app listening on port 80!');
   })
 
 })
 
 
-
-
 app.get('/', function (req, res) {
-	var data = {
-		year: '2012',
-		make: 'honda',
-		model: 'fit'
-	};
-
-	db.collection('cars').find(data).toArray((err, result) => {
-		if (err) return console.log(err)
-		console.log('here');
-		res.render('index.html', {mpg: JSON.stringify(result, null, 4), year: data.year, make: data.make, model: data.model })
-	});
-
-	//res.render('index.html')
+	res.render('index.html')
 })
 
 app.get('/search', function(req, res) {
@@ -85,49 +71,47 @@ app.get('/search', function(req, res) {
 		}
 		else {
 			request(options)
-			.then((models) => {
+				.then((models) => {
 
-			if (models == null) {
-				res.render('index.html', {year: year, make: make, model: model });
-				return
-			}
+				if (models == null) {
+					res.render('index.html', {year: year, make: make, model: model });
+					return
+				}
 
-			if (Array.isArray(models.menuItem)) {
-				models.menuItem = models.menuItem[0];
-			}
+				if (Array.isArray(models.menuItem)) {
+					models.menuItem = models.menuItem[0];
+				}
 
-			var id = models.menuItem.value;
+				var id = models.menuItem.value;
 
-			mpg_options.uri = mpg_url + id;
+				mpg_options.uri = mpg_url + id;
 
-			console.log(mpg_options);
+				console.log(mpg_options);
 
-			request(mpg_options)
-				.then((mpg) => {
-					db.collection('cars').insertOne({
-						year: year, 
-						make: make, 
-						model: model, 
-						mpg: mpg
-					}, function(err, r) {
-    					assert.equal(null, err);
-						assert.equal(1, r.insertedCount);
-					});
-					res.render('index.html', { models: JSON.stringify(models, null, 4), mpg: JSON.stringify(mpg, null, 4), year: year, make: make, model: model })
-			})
-			.catch((err) => {
+				request(mpg_options)
+					.then((mpg) => {
+						db.collection('cars').insertOne({
+							year: year, 
+							make: make, 
+							model: model, 
+							mpg: mpg
+						}, function(err, r) {
+	    					assert.equal(null, err);
+							assert.equal(1, r.insertedCount);
+							res.render('index.html', { models: JSON.stringify(models, null, 4), mpg: JSON.stringify(mpg, null, 4), year: year, make: make, model: model })
+						});
+				})
+				.catch((err) => {
+					console.log(err)
+					res.send('error in request')
+				})
+
+			}).catch((err) => {
 				console.log(err)
 				res.send('error in request')
 			})
-
-			// res.render('index.html', { cars: JSON.stringify(cars, null, 4), year: year, make: make, model: model })
-		})
-		.catch((err) => {
-			console.log(err)
-			res.send('error in request')
-		})
 		} // close else
-	})
+	}) // close db.collection
 })
 
 
