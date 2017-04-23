@@ -43,8 +43,8 @@ MongoClient.connect(url, function(err, database) {
   db = database
   console.log("Connected successfully to server");
  
-  app.listen(80, function () {
-    console.log('Example app listening on port 80!');
+  app.listen(3000, function () {
+    console.log('Example app listening on port 3000!');
   })
 
 })
