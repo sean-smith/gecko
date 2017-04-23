@@ -8,6 +8,17 @@ var passport = require('passport')
 var app = express()
 
 
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
+
 PORT = 8080
 
 // Configure Templating Engine Nunjucks
@@ -41,14 +52,12 @@ app.get('/', function (req, res) {
 })
 
 app.get('/auth/uber',
-  passport.authenticate('uber')
-)
-
-app.get('/auth/uber/callback', 
-  passport.authenticate('uber', { failureRedirect: '/login' }),
+  passport.authenticate('uber', { scope: ['profile'] }
+))
+ 
+app.get('/auth/uber/callback', passport.authenticate('uber', { failureRedirect: '/login' }),
   function(req, res) {
-    // Successful authentication, redirect home.
-    res.redirect('/')
+    res.redirect('/');
 })
 
 app.get('/search', function(req, res) {
