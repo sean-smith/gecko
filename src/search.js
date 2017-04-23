@@ -1,5 +1,29 @@
+var request = require('request-promise')
+assert = require('assert');
 
-function search(req) {
+var mpg_url = "http://www.fueleconomy.gov/ws/rest/ympg/shared/ympgVehicle/";
+
+
+//REQUEST-PROMISE MODULE
+var options = {
+  method: 'GET',
+  uri: 'http://www.fueleconomy.gov/ws/rest/vehicle/menu/options',
+  qs: {
+    year: '2012',
+    make: 'honda',
+    model: 'fit'
+  },
+  json: true
+}
+
+var mpg_options = {  
+  method: 'GET',
+  uri: '',
+  json: true
+}
+
+module.exports = {
+    search: function(req, res, db) {
 	var year = req.query.year;
 	var make = req.query.make;
 	var model = req.query.model;
@@ -56,4 +80,5 @@ function search(req) {
 			})
 		} // close else
 	}) // close db.collection
+}
 }
