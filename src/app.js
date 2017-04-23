@@ -2,6 +2,7 @@ var express = require('express')
 var nunjucks = require('nunjucks')
 var request = require('request-promise')
 var credentials = require('./credentials')
+var search = require('./search')
 var app = express()
 
 var mpg_url = "http://www.fueleconomy.gov/ws/rest/ympg/shared/ympgVehicle/";
@@ -13,25 +14,6 @@ nunjucks.configure('pages', {
     autoescape: true,
     express: app
 })
-
-
-//REQUEST-PROMISE MODULE
-var options = {
-  method: 'GET',
-  uri: 'http://www.fueleconomy.gov/ws/rest/vehicle/menu/options',
-  qs: {
-    year: '2012',
-    make: 'honda',
-    model: 'fit'
-  },
-  json: true
-}
-
-var mpg_options = {  
-  method: 'GET',
-  uri: '',
-  json: true
-}
 
 var MongoClient = require('mongodb').MongoClient
   , assert = require('assert');
@@ -62,7 +44,7 @@ app.get('/login', function (req, res) {
 })
 
 app.get('/search', function(req, res) {
-	search(req)
+	search.search(req, res, db)
 })
 
 
