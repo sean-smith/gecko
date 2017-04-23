@@ -3,9 +3,10 @@ var nunjucks = require('nunjucks')
 var request = require('request-promise')
 var credentials = require('./credentials')
 var search = require('./search')
+var auth = require('./auth.js')
+var passport = require('passport')
 var app = express()
 
-var mpg_url = "http://www.fueleconomy.gov/ws/rest/ympg/shared/ympgVehicle/";
 
 PORT = 8080
 
@@ -39,8 +40,15 @@ app.get('/', function (req, res) {
 	res.render('index.html')
 })
 
-app.get('/login', function (req, res) {
-	res.render('login.html', login_url=credentials.client_id)
+app.get('/auth/uber',
+  passport.authenticate('uber')
+)
+
+app.get('/auth/uber/callback', 
+  passport.authenticate('uber', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/')
 })
 
 app.get('/search', function(req, res) {

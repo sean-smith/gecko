@@ -21,6 +21,8 @@
     "mongodb": "^2.2.25",
     "nodemon": "^1.11.0",
     "nunjucks": "^3.0.0",
+    "passport": "^0.3.2",
+    "passport-uber": "0.0.1",
     "request": "^2.81.0",
     "request-promise": "^4.2.0"
   }
