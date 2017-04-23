@@ -55,9 +55,13 @@ app.get('/auth/uber',
   passport.authenticate('uber', { scope: ['profile'] }
 ))
  
-app.get('/auth/uber/callback', passport.authenticate('uber', { failureRedirect: '/login' }),
+app.get('/auth/uber/callback', passport.authenticate('uber', { failureRedirect: '/login'}),
   function(req, res) {
-    res.redirect('/');
+    db.collection('cars').insertOne({
+      user: req.user
+    }, function(err, r) {
+      res.redirect('/');
+    })
 })
 
 app.get('/search', function(req, res) {
