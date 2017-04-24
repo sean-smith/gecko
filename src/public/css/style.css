@@ -6,7 +6,7 @@
 .jumbotron .title{
 	font-size: 40px;
 	color: black;
-	font-family: Georgia, serif;
+	/*font-family: Georgia, serif;*/
 }
 
 .container-fluid{
@@ -14,7 +14,7 @@
 }
 
 .navbar-header .navbar-brand{
-	font-family: "Times New Roman", Times, serif;
+	/*font-family: "Times New Roman", Times, serif;*/
 	font-size: 30px;
 	color: #000000;
 }

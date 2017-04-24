@@ -3,7 +3,6 @@
 {% include 'head.njk' %}
 
 <body>
-	
 	<!-- Navbar -->
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
@@ -15,19 +14,30 @@
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
 				</ul>
-				<ul class="nav navbar-nav navbar-right">
-			    	{% if profile_pic %}
-			    		<li><img src="{{ profile_pic }}" style="width:50px;height:50px;"></li>
-			    	{% endif %}
-			    	{% if name %}
-			   			<li><p>{{ name }}</p></li>
-					{% else %}
-			    		<li><a class="login" href="/login">Login</a></li>
-					{% endif %}
-				</ul>
+					<ul class="nav navbar-nav navbar-right">
+				    	{% if profile_pic %}
+				    		<li><img src="{{ profile_pic }}" style="width:50px;height:50px;"></li>
+				    	{% endif %}
+				    	{% if name %}
+				   			<li><p>{{ name }}</p></li>
+				   			<li><a class="logout" href="/">Logout</a></li>
+						{% else %}
+				    		<li><a class="login" href="/login">Login</a></li>
+						{% endif %}
+					</ul>
 			</div>
 		</div>
 	</nav>
+
+	{% if !name %}
+		<div class="notLoggedIn">
+			<ul style="list-style-type:none">
+				<li><h1>Sorry, you are not logged in!</h1></li>
+				<li><h3>Please click login to access your Uber environmental impact profile</h3></li>
+	 		</ul>
+		</div>
+	{% else %}
+
 
 	<div class="page">
 		<div class="container">
@@ -59,5 +69,6 @@
 		</div>
 		
 	</div>
+ {% endif %}
 </body>
 </html>
