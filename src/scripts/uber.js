@@ -24,8 +24,9 @@ module.exports = {
 			console.log("failure")
 		})
 
-		// return "hi"
 	}
 
-	get_receipt: function(ride_id, res)
+	get_receipt: function(ride_id, res) {
+		return null
+	}
 }
