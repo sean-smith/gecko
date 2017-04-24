@@ -1,23 +1,12 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+{% include 'head.njk' %}
 
-	<!-- Optional theme -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-	<script
-  src="https://code.jquery.com/jquery-3.2.1.min.js"
-  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-  crossorigin="anonymous"></script>
-
-	<!-- Latest compiled and minified JavaScript -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-</head>
-<div class="page">
-<head>
+<body>
+	
+	<!-- Navbar -->
 	<nav class="navbar navbar-default">
+<<<<<<< HEAD
 	  <div class="container-fluid">
 	    <div class="navbar-header">
 	      <a class="navbar-brand" href="index.html">Uber Impact</a>
@@ -57,36 +46,71 @@
 	}
 </style>
 
+=======
+		<div class="container-fluid">
+			<div class="navbar-header">
+			  <a class="navbar-brand" href="index.html">Uber Impact</a>
+			</div>
 
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+			    	{% if profile_pic %}
+			    		<li><img src="{{ profile_pic }}" style="width:50px;height:50px;"></li>
+			    	{% endif %}
+			    	{% if name %}
+			   			<li><p>{{ name }}</p></li>
+					{% else %}
+			    		<li><a class="login" href="/login">Login</a></li>
+					{% endif %}
+				</ul>
+			</div>
+		</div>
+	</nav>
+>>>>>>> 2adbece99ff3bbff9f9ffc7ced47ca1ea5d5a3ca
 
+	<div class="page">
+		<div class="container">
+			<div class="jumbotron" >
+				  <h1 class="title" style="margin-left: 30px;">Summary</h1>
+				  <p>...</p>
+			</div>
+		</div>
+
+<<<<<<< HEAD
 	<body>
 
 	<div class="container">
 		<div class="jumbotron">
 			  <h1 class="title" style="margin-left: 30px;">Summary</h1>
+=======
+		<div class="container">
+			<div class="jumbotron">
+			  <h1 class="title" style="margin-left: 30px;">Trip on (blank)</h1>
+>>>>>>> 2adbece99ff3bbff9f9ffc7ced47ca1ea5d5a3ca
 			  <p>...</p>
+			</div>
 		</div>
-	</div>
-	<div class="container">
-		<div class="jumbotron">
-		  <h1 class="title" style="margin-left: 30px;">Trip on (blank)</h1>
-		  <p>...</p>
-		</div>
-	</div>
-	<div class="container">
-		<div class="jumbotron">
-		  <h1 class="title" style="margin-left: 30px;">Trip on (blank)</h1>
-		  <p>...</p>
-		</div>
-	</div>
 
-	<div class="container">
-		<ul style="list-style-type:none">
-			<li><img src="http://www.conceptdraw.com/How-To-Guide/picture/Percentage-pie-chart-DA-determinations.png" style="width:500px;height:300px;"></li>
-		</ul>
+		<div class="container">
+			<div class="jumbotron">
+			  <h1 class="title" style="margin-left: 30px;">Trip on (blank)</h1>
+			  <p>...</p>
+			</div>
+		</div>
+
+		<div class="container">
+			<ul style="list-style-type:none">
+				<li><img src="http://www.conceptdraw.com/How-To-Guide/picture/Percentage-pie-chart-DA-determinations.png" style="width:500px;height:300px;"></li>
+			</ul>
+		</div>
 		
 	</div>
+</body>
 
+<<<<<<< HEAD
 	</body>
 </div>
 <style type="text/css">
@@ -94,4 +118,6 @@
 /*		background-color: ;*/
 	}
 </style>
+=======
+>>>>>>> 2adbece99ff3bbff9f9ffc7ced47ca1ea5d5a3ca
 </html>

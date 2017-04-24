@@ -17,12 +17,15 @@
   },
   "homepage": "https://github.com/sean-smith/gecko",
   "dependencies": {
+    "body-parser": "^1.17.1",
+    "connect-flash": "^0.1.1",
+    "cookie-parser": "^1.4.3",
     "express": "^4.15.2",
+    "express-session": "^1.15.2",
     "mongodb": "^2.2.25",
-    "nodemon": "^1.11.0",
+    "mongoose": "^4.9.6",
     "nunjucks": "^3.0.0",
     "passport": "^0.3.2",
-    "passport-uber": "0.0.1",
     "passport-uber-v2": "^0.1.1",
     "request": "^2.81.0",
     "request-promise": "^4.2.0"
