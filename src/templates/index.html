@@ -3,50 +3,8 @@
 {% include 'head.njk' %}
 
 <body>
-	
 	<!-- Navbar -->
 	<nav class="navbar navbar-default">
-<<<<<<< HEAD
-	  <div class="container-fluid">
-	    <div class="navbar-header">
-	      <a class="navbar-brand" href="index.html">Uber Impact</a>
-	    </div>
-
-	    <!-- Collect the nav links, forms, and other content for toggling -->
-	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-	      <ul class="nav navbar-nav">
-	      </ul>
-		      <ul class="nav navbar-nav navbar-right">
-		        	<li><img src="https://d1w2poirtb3as9.cloudfront.net/default.jpeg" style="width:50px;height:50px;"></li><li><a href="/auth/uber">Login</a></li>
-		      </ul>
-	    </div><!-- /.navbar-collapse -->
-	  </div><!-- /.container-fluid -->
-	</nav>
-</head>
-
-<style type="text/css">
-	
-	.container .jumbotron {
-	padding-left: 0px;
-	padding-top: 1px; 
-	background-color: #f2f2f2;
-	}
-	.jumbotron .title{
-		font-size: 40px;
-		color: black;
-		font-family: Georgia, serif;
-	}
-	.container-fluid{
-		background-color: #edf2f7;
-	}
-	.navbar-header .navbar-brand{
-		font-family: "Times New Roman", Times, serif;
-		font-size: 30px;
-		color: #000000;
-	}
-</style>
-
-=======
 		<div class="container-fluid">
 			<div class="navbar-header">
 			  <a class="navbar-brand" href="index.html">Uber Impact</a>
@@ -56,20 +14,20 @@
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
 				</ul>
-				<ul class="nav navbar-nav navbar-right">
-			    	{% if profile_pic %}
-			    		<li><img src="{{ profile_pic }}" style="width:50px;height:50px;"></li>
-			    	{% endif %}
-			    	{% if name %}
-			   			<li><p>{{ name }}</p></li>
-					{% else %}
-			    		<li><a class="login" href="/login">Login</a></li>
-					{% endif %}
-				</ul>
+					<ul class="nav navbar-nav navbar-right">
+				    	{% if profile_pic %}
+				    		<li><img src="{{ profile_pic }}" style="width:50px;height:50px;"></li>
+				    	{% endif %}
+				    	{% if name %}
+				   			<li><p>{{ name }}</p></li>
+				   			<li><a class="logout" href="/">Logout</a></li>
+						{% else %}
+				    		<li><a class="login" href="/login">Login</a></li>
+						{% endif %}
+					</ul>
 			</div>
 		</div>
 	</nav>
->>>>>>> 2adbece99ff3bbff9f9ffc7ced47ca1ea5d5a3ca
 
 	<div class="page">
 		<div class="container">
@@ -79,17 +37,10 @@
 			</div>
 		</div>
 
-<<<<<<< HEAD
-	<body>
 
-	<div class="container">
-		<div class="jumbotron">
-			  <h1 class="title" style="margin-left: 30px;">Summary</h1>
-=======
 		<div class="container">
 			<div class="jumbotron">
 			  <h1 class="title" style="margin-left: 30px;">Trip on (blank)</h1>
->>>>>>> 2adbece99ff3bbff9f9ffc7ced47ca1ea5d5a3ca
 			  <p>...</p>
 			</div>
 		</div>
@@ -109,15 +60,4 @@
 		
 	</div>
 </body>
-
-<<<<<<< HEAD
-	</body>
-</div>
-<style type="text/css">
-	.page {
-/*		background-color: ;*/
-	}
-</style>
-=======
->>>>>>> 2adbece99ff3bbff9f9ffc7ced47ca1ea5d5a3ca
 </html>
