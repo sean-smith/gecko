@@ -12,14 +12,6 @@ module.exports = function (passport) {
 	},
 	function(accessToken, refreshToken, profile, done) {
 
-		console.log("accessToken")
-		console.log(accessToken)
-		console.log("refreshToken")
-		console.log(accessToken)
-
-		console.log("Profile:")
-		console.log(profile)
-
 		var new_user = new User()
 		new_user.first_name = profile.firstname
 		new_user.last_name = profile.lastname
@@ -28,9 +20,6 @@ module.exports = function (passport) {
 		new_user.access_token = accessToken
 		new_user.refresh_token = refreshToken
 		new_user.rider_id = profile._json.rider_id
-
-		console.log("New User:")
-		console.log(new_user)
 		
 		new_user.save(function (err) {
 			if (err) console.log(err)
