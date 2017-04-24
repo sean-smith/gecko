@@ -2,7 +2,6 @@
 
 module.exports = function (app, passport, upload) {
 	app.get('/', function (req, res) {
-		console.log(req.user)
 		if (req.isAuthenticated()) {
 			res.render('index.html', {'name': req.user.email, 'profile_pic': req.user.profile_pic})
 		} else {
