@@ -28,7 +28,15 @@
 	      <ul class="nav navbar-nav">
 	      </ul>
 	      <ul class="nav navbar-nav navbar-right">
-	        <li><img src="https://d1w2poirtb3as9.cloudfront.net/default.jpeg" style="width:50px;height:50px;"></li><li><a class="login" href="/auth/uber">Login</a></li>
+	        <li>
+	        {% if profile_pic %}
+	        	<img src="{{ profile_pic }}" style="width:50px;height:50px;"></li>
+	        {% endif %}
+	        {% if logged_in %}
+	       		<li><p>{{ username }}</p></li>
+	        {% else %}
+	        	<li><a class="login" href="/auth/uber">Login</a></li>
+	        {% endif %}
 	      </ul>
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->
@@ -93,4 +101,5 @@
 	.page {
 		background-color: ;
 	}
+</style>
 </html>
