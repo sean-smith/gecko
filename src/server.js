@@ -1,6 +1,10 @@
 const express = require('express')
 const nunjucks = require('nunjucks')
 const request = require('request-promise')
+const session = require('express-session')
+const flash = require('connect-flash')
+const cookieParser = require('cookie-parser')
+const bodyParser = require('body-parser')
 const credentials = require('./credentials')
 const search = require('./scripts/search')
 const passport = require('passport')
@@ -17,12 +21,20 @@ app.use('/img', express.static(path.join(__dirname, 'public/img')))
 app.use('/js', express.static(path.join(__dirname, 'public/js')))
 app.use('/css', express.static(path.join(__dirname, 'public/css')))
 
+// Session Configuration
+app.use(session({ secret: "supersecretsession" }))
+
+// Setup cookies
+app.use(cookieParser())
+app.use(bodyParser())
+
 // Config passport
 require('./scripts/passport')(passport)
 
 // Use Passport
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash())
 
 // Configure Templating Engine Nunjucks
 nunjucks.configure('templates', {
@@ -30,26 +42,8 @@ nunjucks.configure('templates', {
 	express: app
 })
 
-// // Setup MongoClient
-// var MongoClient = require('mongodb').MongoClient
-//   , assert = require('assert');
-
-// Connection URL
-var db_url = 'mongodb://localhost:27017/gecko'
-var db
-
-// Use connect method to connect to the server
-// MongoClient.connect(url, function(err, database) {
-// 	assert.equal(null, err)
-// 	db = database
-// 	console.log("Connected successfully to server");
-
-// 	app.listen(port, function () {
-// 		console.log(`Example app listening on port ${port}!`);
-// 	})
-// })
-
 // Setup Mongoose
+var db_url = 'mongodb://localhost:27017/gecko'
 mongoose.connect(db_url)
 
 // Include Routes

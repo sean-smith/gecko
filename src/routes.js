@@ -2,14 +2,19 @@
 
 module.exports = function (app, passport, upload) {
 	app.get('/', function (req, res) {
-		res.render('index.html')
+		console.log(req.user)
+		if (req.isAuthenticated()) {
+			res.render('index.html', {'name': req.user.email, 'profile_pic': req.user.profile_pic})
+		} else {
+			res.render('index.html')
+		}
 	})
 
-	app.get('/auth/uber',
-	  passport.authenticate('uber', { scope: ['profile'] })
-	)
+	app.get('/login', passport.authenticate('uber', {scope: ['profile']}), function(req, res) {
+		res.redirect('/')
+	})
 	 
-	app.get('/auth/uber/callback', passport.authenticate('uber', { failureRedirect: '/'}), function (req, res) {
+	app.get('/login/callback', passport.authenticate('uber', { failureRedirect: '/'}), function (req, res) {
 		res.redirect('/')
 	})
 
