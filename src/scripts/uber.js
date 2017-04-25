@@ -53,15 +53,23 @@ function get_rides(req, res) {
 		console.log("success")
 		var distance = get_total_distance(rides.history)
 		req.user.distance = distance
-		User.update({ _id: req.user.id }, { $set: { distance: distance }}, function() {
-			console.log('here')
-			res.redirect('/')
-		});
+
 		// get_receipt(rides.history[0].request_id, user.access_token, res)
 	})
 	.catch((err) => {
 		console.log(err)
 		console.log("failure")
+	})
+}
+
+function get_and_cache(user, res) {
+
+	// User.get();
+
+
+	User.update({ _id: user.id }, { $set: { distance: distance }}, function() {
+		console.log('here')
+		res.redirect('/')
 	})
 }
 

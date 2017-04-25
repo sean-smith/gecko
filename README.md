@@ -13,4 +13,4 @@ You should now have the latest versions of all required packages. Note these are
 
 	node app.js
 
-Then go to http://localhost:3000
+Then go to http://localhost:8080
