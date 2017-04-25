@@ -4,21 +4,21 @@ const uber = require('./scripts/uber')
 module.exports = function (app, passport, upload) {
 	app.get('/', function (req, res) {
 		if (req.isAuthenticated()) {
-			res.render('index.html', {'name': req.user.first_name, 'profile_pic': req.user.picture})
+			res.render('new.html', {'user': req.user})
 		} else {
-			res.render('index.html')
+			res.render('new.html')
 		}
 	})
 
-	app.get('/rides', function(req, res) {
+	app.get('/distance', function(req, res) {
 		if (req.isAuthenticated()) {
-			uber.get_rides(req.user, res)
+			uber.get_rides(req, res)
 		} else {
 			res.redirect('/')
 		}
 	})
 
-	app.get('/login', passport.authenticate('uber', {scope: ['profile', 'history', 'request_receipt']}), function(req, res) {
+	app.get('/login', passport.authenticate('uber', {scope: ['history', 'request_receipt', 'profile']}), function(req, res) {
 		res.redirect('/')
 	})
 	 

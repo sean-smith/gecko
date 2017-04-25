@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	{% include 'head.njk' %}
+	<title>Gecko</title>
+	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+</head>
+<body>
+
+<style type="text/css">
+	body {
+		font-family: 'Montserrat', sans-serif;
+	}
+	.big {
+		font-size: 72px;
+		margin-left: auto;
+	}
+	.header {
+		font-size: 50px;
+	}
+	.left {
+		border-right: solid;
+	}
+</style>
+
+	{% if user %}
+	<h1 class="header">Hi {{user.first_name}}</h1>
+
+	<div class="row">
+		<div class="big col-md-6 left text-center">
+			${{user.money}}
+		</div>
+
+		<div class="big col-md-6 text-center">
+			{{user.distance}} Miles
+		</div>
+	</div>
+	{% else %}
+		<h1 style="font-size: 200px">Please <a href="/login">Login</a></h1>
+	{% endif %}
+
+</body>
+</html>

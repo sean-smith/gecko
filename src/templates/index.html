@@ -20,7 +20,7 @@
 				    	{% endif %}
 				    	{% if name %}
 				   			<li><p>{{ name }}</p></li>
-				   			<li><a class="logout" href="/">Logout</a></li>
+				   			<li><a class="logout" href="/logout">Logout</a></li>
 						{% else %}
 				    		<li><a class="login" href="/login">Login</a></li>
 						{% endif %}
@@ -29,7 +29,7 @@
 		</div>
 	</nav>
 
-	{% if !name %}
+	{% if not name %}
 		<div class="notLoggedIn">
 			<ul style="list-style-type:none">
 				<li><h1>Sorry, you are not logged in!</h1></li>

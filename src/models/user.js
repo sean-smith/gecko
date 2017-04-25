@@ -7,7 +7,9 @@ var user = mongoose.Schema({
 	'access_token': String,
 	'refresh_token': String,
 	'rider_id': String,
-	'email': String
+	'email': String,
+	'distance': Number,
+	'money': Number
 })
 
 module.exports = mongoose.model('User', user)

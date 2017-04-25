@@ -11,20 +11,32 @@ module.exports = function (passport) {
 		callbackURL: "http://localhost:8080/login/callback"
 	},
 	function(accessToken, refreshToken, profile, done) {
-
-		var new_user = new User()
-		new_user.first_name = profile.firstname
-		new_user.last_name = profile.lastname
-		new_user.picture = profile.avatar
-		new_user.email = profile.email
-		new_user.access_token = accessToken
-		new_user.refresh_token = refreshToken
-		new_user.rider_id = profile._json.rider_id
 		
-		new_user.save(function (err) {
-			if (err) console.log(err)
-			return done(null, new_user)
-		})
+		User.findOne({ 'rider_id': profile._json.rider_id }, function (err, user) {
+
+			// If user exists then find him
+			if (user) {
+				return done(null, user)
+			}
+
+			// Create User
+			var new_user = new User()
+			new_user.first_name = profile.firstname
+			new_user.last_name = profile.lastname
+			new_user.picture = profile.avatar
+			new_user.email = profile.email
+			new_user.access_token = accessToken
+			new_user.refresh_token = refreshToken
+			new_user.rider_id = profile._json.rider_id
+			new_user.distance = 127
+			new_user.money = 430
+			
+			// Add to DB
+			new_user.save(function (err) {
+				if (err) console.log(err)
+				return done(null, new_user)
+			})
+		})	
 	}
 	))
 

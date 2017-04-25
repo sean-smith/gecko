@@ -46,6 +46,7 @@ nunjucks.configure('templates', {
 var db_url = 'mongodb://localhost:27017/gecko'
 mongoose.connect(db_url)
 
+
 // Include Routes
 require('./routes')(app, passport)
 
