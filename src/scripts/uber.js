@@ -1,8 +1,9 @@
 const request = require('request-promise')
 const User = require('../models/user')
 const Products = require('../models/products')
-function cost_calculator(service, start_time, end_time, miles){
 
+
+function cost_calculator(service, start_time, end_time, miles){
 	var min_fare = 0
 	var base_fare = 0
 	var cost_p_min = 0.15
@@ -55,6 +56,12 @@ function cost_calculator(service, start_time, end_time, miles){
 }
 
 
+function real_time(utc){
+	var d = new Date(0);
+	d.setUTCSeconds(utc);
+	return d
+}
+
 function getRideDetails(req, next) {
 	var dist = 0
 	var index = 0
@@ -70,7 +77,11 @@ function getRideDetails(req, next) {
 		getProductsDescription(req, ride, function(description) {
 			req.user.trips.history[index].description = description
 			var cost = cost_calculator(description.display_name, ride.start_time, ride.end_time, ride.distance)
+			// Convert Time
+			req.user.trips.history[index].date_time = real_time(ride.start_time)
+			// Get Cost
 			req.user.trips.history[index].cost = cost
+
 			done[index] = true
 			var terminate = true
 			for (var i = 0; i < done.length; i++) {
