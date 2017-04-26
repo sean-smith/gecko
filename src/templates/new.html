@@ -32,11 +32,12 @@
 	}
 	.trip {
 		background-color: #f5f5f5;
-		margin-top: 10px;
-		margin-bottom: 10px;
+		margin-top: 5px;
+		margin-bottom: 5px;
 		border-radius: 5px;
 		border-width: 1px;
 		border-color: #000;
+		padding:20px;
 	}
 </style>
 
@@ -45,41 +46,48 @@
 		<div class="col-md-4">
 			<h1 class="header">Hi {{user.first_name}}</h1>
 		</div>
-		<div class="col-md-4">
-			
-		</div>
+		<div class="col-md-4"></div>
 		<div class="col-md-4">
 			<a href="/logout"><h1 class="header">Logout</h1></a>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-offset-md-4 col-md-8 text-center header"> 
-			Total Trips
+		<div class="col-md-8 offset-md-2 text-center"> 
+			<div class="header">Total Trips</div>
 		</div>
 	</div>
 	<div class="row">
-		<div class="big col-md-6 left text-center">
-			{{ user.trips.count }} Trips
+		<div class="col-md-4 offset-md-2 left text-center">
+			<div class="big">
+				{{ user.trips.count }} Trips
+			</div>
 		</div>
-
-		<div class="big col-md-6 text-center">
-			{{user.total_distance | int }} Miles
+		<div class="col-md-4 text-center">
+			<div class="big">
+				{{user.total_distance | int }} Miles
+			</div>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-8 col-md-offset-2">
+		<div class="col-md-8 offset-md-2">
 			{% include 'barchart.njk' %}
 		</div>
 		<script type="text/javascript" src="js/lib/chart.js"></script>
 	</div>
 	{% for trip in user.trips.history %}
 	<div class="row">
-		<div class="col-md-8 col-md-offset-2 trip">
+		<div class="col-md-8 offset-md-2 trip">
 			<h1>{{ trip.start_city.display_name }} Trip</h1>
-			<p>You travelled {{ trip.distance | round(2) }} miles.</p>
-			<p>On {{ trip.start_time | date('MMMM Do YYYY, h:mm:ss a') }}.</p>
-			<p>You took a {{ trip.description.display_name }} product.</p>
-			<img src="{{ trip.description.image }}">
+			<div class="row">
+				<div class="col-md-2">
+					<img src="{{ trip.description.image }}">
+				</div>
+				<div class="col-md-10">
+					<p>You travelled {{ trip.distance | round(2) }} miles.</p>
+					<p>On {{ trip.start_time | date('MMMM Do YYYY, h:mm:ss a') }}.</p>
+					<p>You took a {{ trip.description.display_name }} product.</p>
+				</div>
+			</div>
 		</div>
 	</div>
 	{% else %}
