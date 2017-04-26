@@ -3,6 +3,12 @@ const User = require('../models/user')
 const Products = require('../models/products')
 
 
+function real_time(utc){
+	var d = new Date(0);
+	d.setUTCSeconds(utc);
+	return d
+}
+
 function getRideDetails(req, next) {
 	var dist = 0
 	var index = 0
@@ -17,6 +23,10 @@ function getRideDetails(req, next) {
 		dist += ride.distance
 		getProductsDescription(req, ride, function(description) {
 			req.user.trips.history[index].description = description
+
+			// Convert Time
+			req.user.trips.history[index].date_time = real_time(ride.start_time)
+
 			done[index] = true
 			var terminate = true
 			for (var i = 0; i < done.length; i++) {

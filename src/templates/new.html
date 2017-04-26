@@ -84,7 +84,7 @@
 				</div>
 				<div class="col-md-10">
 					<p>You travelled {{ trip.distance | round(2) }} miles.</p>
-					<p>On {{ trip.start_time | date('MMMM Do YYYY, h:mm:ss a') }}.</p>
+					<p>On {{ trip.date_time | date('MMMM Do YYYY, h:mm:ss a') }}.</p>
 					<p>You took a {{ trip.description.display_name }} product.</p>
 				</div>
 			</div>
