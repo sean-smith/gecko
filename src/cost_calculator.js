@@ -41,6 +41,12 @@ function cost_calculator(service, start_time, end_time, miles){
 		return -1
 	}
 
-	return (base_fare + (cost_p_min * end_time-start_time / 60.0) + (cost_p_mile * miles) + booking_fee)
+	var cost =  (base_fare + (cost_p_min * end_time-start_time / 60.0) + (cost_p_mile * miles) + booking_fee)
 
+	if (cost<min_fare){
+		return min_fare
+	}
+	else{
+		return cost
+	}
 }
