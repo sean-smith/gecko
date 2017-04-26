@@ -10,6 +10,7 @@ var user = mongoose.Schema({
 	'email': String,
 	'total_distance': Number,
 	'total_money': Number,
+	'total_cost' : Number,
 	'trips': mongoose.Schema.Types.Mixed,
 })
 
