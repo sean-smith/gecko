@@ -3,6 +3,59 @@ const User = require('../models/user')
 const Products = require('../models/products')
 
 
+function cost_calculator(service, start_time, end_time, miles){
+	var min_fare = 0
+	var base_fare = 0
+	var cost_p_min = 0.15
+	var cost_p_mile = 0.90
+	var booking_fee = 0
+	if (service == "UberX"){
+		min_fare = 5.15
+		booking_fee = 1.65
+	}
+	else if (service == "UberXL"){
+		base_fare = 1.0
+		min_fare = 7.65
+		cost_p_min = 0.30
+		cost_p_mile = 1.55
+		booking_fee = 1.65
+	}
+	else if (service == "UberSelect"){
+		base_fare = 5.0
+		min_fare = 10.65
+		cost_p_min = 0.40
+		cost_p_mile = 2.35
+		booking_fee = 1.65
+	}
+	else if (service == "UberBlack"){
+		base_fare = 8.0
+		min_fare = 15.0
+		cost_p_min = 0.45
+		cost_p_mile = 3.55
+		booking_fee = 0.0
+	}
+	else if (service == "UberSUV"){
+		base_fare = 15.0
+		min_fare = 25.0
+		cost_p_min = 0.55
+		cost_p_mile = 4.25
+		booking_fee = 0.0
+	}
+	else{
+		return "Unknown"
+	}
+
+	var cost =  (base_fare + (cost_p_min * end_time-start_time / 60.0) + (cost_p_mile * miles) + booking_fee)
+
+	if (cost<min_fare){
+		return min_fare
+	}
+	else{
+		return cost
+	}
+}
+
+
 function real_time(utc){
 	var d = new Date(0);
 	d.setUTCSeconds(utc);
@@ -26,6 +79,10 @@ function getRideDetails(req, next) {
 
 			// Convert Time
 			req.user.trips.history[index].date_time = real_time(ride.start_time)
+
+			// Get Cost
+			var cost = cost_calculator(service, ride.start_time, ride.end_time, ride.distance)
+			req.user.trips.history[index].cost = cost
 
 			done[index] = true
 			var terminate = true
