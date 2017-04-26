@@ -2,6 +2,7 @@ const express = require('express')
 const nunjucks = require('nunjucks')
 const request = require('request-promise')
 const session = require('express-session')
+const dateFilter = require('nunjucks-date-filter');
 const flash = require('connect-flash')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
@@ -37,10 +38,13 @@ app.use(passport.session());
 app.use(flash())
 
 // Configure Templating Engine Nunjucks
-nunjucks.configure('templates', {
+var env = nunjucks.configure('templates', {
 	autoescape: true,
 	express: app
 })
+
+// Setup date formatting w/ Nunjucks
+env.addFilter('date', dateFilter);
 
 // Setup Mongoose
 var db_url = 'mongodb://localhost:27017/gecko'

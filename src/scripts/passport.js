@@ -28,8 +28,6 @@ module.exports = function (passport) {
 			new_user.access_token = accessToken
 			new_user.refresh_token = refreshToken
 			new_user.rider_id = profile._json.rider_id
-			new_user.distance = 127
-			new_user.money = 430
 			
 			// Add to DB
 			new_user.save(function (err) {

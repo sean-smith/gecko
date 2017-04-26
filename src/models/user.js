@@ -8,8 +8,9 @@ var user = mongoose.Schema({
 	'refresh_token': String,
 	'rider_id': String,
 	'email': String,
-	'distance': Number,
-	'money': Number
+	'total_distance': Number,
+	'total_money': Number,
+	'trips': mongoose.Schema.Types.Mixed,
 })
 
 module.exports = mongoose.model('User', user)
