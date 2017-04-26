@@ -15,7 +15,7 @@ module.exports = function (app, passport) {
 	app.get('/login', passport.authenticate('uber', {scope: ['profile', 'history', 'request_receipt']}), function(req, res) {
 		res.redirect('/')
 	})
-	 
+
 	app.get('/login/callback', passport.authenticate('uber', { failureRedirect: '/'}), function (req, res) {
 		res.redirect('/')
 	})
