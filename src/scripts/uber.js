@@ -3,8 +3,68 @@ const User = require('../models/user')
 const Products = require('../models/products')
 
 
+function cost_calculator(service, start_time, end_time, miles){
+	var min_fare = 0
+	var base_fare = 0
+	var cost_p_min = 0.15
+	var cost_p_mile = 0.90
+	var booking_fee = 0
+	if (service == "uberX"){
+		min_fare = 5.15
+		booking_fee = 1.65
+	}
+	else if (service == "uberXL"){
+		base_fare = 1.0
+		min_fare = 7.65
+		cost_p_min = 0.30
+		cost_p_mile = 1.55
+		booking_fee = 1.65
+	}
+	else if (service == "uberSelect"){
+		base_fare = 5.0
+		min_fare = 10.65
+		cost_p_min = 0.40
+		cost_p_mile = 2.35
+		booking_fee = 1.65
+	}
+	else if (service == "uberBlack"){
+		base_fare = 8.0
+		min_fare = 15.0
+		cost_p_min = 0.45
+		cost_p_mile = 3.55
+		booking_fee = 0.0
+	}
+	else if (service == "uberSUV"){
+		base_fare = 15.0
+		min_fare = 25.0
+		cost_p_min = 0.55
+		cost_p_mile = 4.25
+		booking_fee = 0.0
+	}
+	else{
+		return 0
+	}
+
+	var cost = (base_fare + (cost_p_min * (end_time-start_time) / 60.0) + (cost_p_mile * miles) + booking_fee)
+	//console.log(cost)
+	if (cost<min_fare){
+		return min_fare
+	}
+	else{
+		return cost
+	}
+}
+
+
+function real_time(utc){
+	var d = new Date(0);
+	d.setUTCSeconds(utc);
+	return d
+}
+
 function getRideDetails(req, next) {
 	var dist = 0
+	var total_cost = 0
 	var index = 0
 
 	// Done array makes sure everything is done before continuing
@@ -17,6 +77,13 @@ function getRideDetails(req, next) {
 		dist += ride.distance
 		getProductsDescription(req, ride, function(description) {
 			req.user.trips.history[index].description = description
+			var cost = cost_calculator(description.display_name, ride.start_time, ride.end_time, ride.distance)
+			// Convert Time
+			req.user.trips.history[index].date_time = real_time(ride.start_time)
+			// Get Cost
+			req.user.trips.history[index].cost = cost
+			total_cost += cost
+
 			done[index] = true
 			var terminate = true
 			for (var i = 0; i < done.length; i++) {
@@ -26,6 +93,8 @@ function getRideDetails(req, next) {
 			}
 			if (terminate) {
 				req.user.total_distance = dist
+				req.user.total_cost = total_cost
+				console.log(total_cost)
 				return next(req)
 			}
 		})
@@ -85,21 +154,23 @@ function getRidesAPI(req, next) {
 
 function getRideData(req, res, next) {
 
+	/*
 	// Check if already set in session obj
 	if (req.user.trips && req.user.total_distance) {
 		return next(req, res)
 	}
-
+*/
 	// Look for info in DB
 	User.findById(req.user.id, function (err, user) {
 
+/*
 		// If it's there return it
 		if (user.trips && user.total_distance) {
 			req.user.trips = user.trips
 			req.user.total_distance = user.total_distance
 			return next(req, res)
 		}
-
+*/
 		// Otherwise fetch it from API
 		getRidesAPI(req, function(req) {
 
@@ -107,7 +178,8 @@ function getRideData(req, res, next) {
 			User.update({ _id: req.user.id }, { 
 				$set: { 
 					'trips': req.user.trips, 
-					'total_distance': req.user.total_distance 
+					'total_distance': req.user.total_distance, 
+					'total_cost': req.user.total_cost
 				}
 			}, function(err) {
 				if (err) console.log(err)

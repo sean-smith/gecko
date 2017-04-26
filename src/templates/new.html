@@ -69,6 +69,18 @@
 		</div>
 	</div>
 	<div class="row">
+		<div class="col-md-8 offset-md-2 text-center"> 
+			<div class="header">Total Cost</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4 offset-md-2 left text-center">
+			<div class="big">
+				Cost $ {{ user.total_cost | int }} 
+			</div>
+		</div>
+	</div>
+	<div class="row">
 		<div class="col-md-8 offset-md-2">
 			{% include 'barchart.html' %}
 		</div>
@@ -84,7 +96,8 @@
 				</div>
 				<div class="col-md-10">
 					<p>You travelled {{ trip.distance | round(2) }} miles.</p>
-					<p>On {{ trip.start_time | date('MMMM Do YYYY, h:mm:ss a') }}.</p>
+					<p>On {{ trip.date_time | date('MMMM Do YYYY, h:mm:ss a') }}.</p>
+					<p>It costed you ${{ trip.cost }}.</p>
 					<p>You took a {{ trip.description.display_name }} product.</p>
 				</div>
 			</div>
