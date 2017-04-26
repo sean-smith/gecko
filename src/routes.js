@@ -12,7 +12,7 @@ module.exports = function (app, passport) {
 		}
 	})
 
-	app.get('/login', passport.authenticate('uber', {scope: ['history', 'request_receipt', 'profile']}), function(req, res) {
+	app.get('/login', passport.authenticate('uber', {scope: ['profile', 'history', 'request_receipt']}), function(req, res) {
 		res.redirect('/')
 	})
 	 
