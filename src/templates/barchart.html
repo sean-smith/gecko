@@ -141,13 +141,13 @@ var svg = d3.select("body").append("svg")
 
 
   svg.append("g")
-      .attr("transform", "translate(0," + height + ")")
+      .attr("transform", "translate(0," + 10 + ")") //height
       .call(d3.axisBottom(x));
 
   svg.append("text")             
       .attr("transform",
             "translate(" + (width/2) + " ," + 
-                           (height + margin.top + 20) + ")")
+                           (10) + ")") //height
       .style("text-anchor", "middle")
       .text("Date");
 
