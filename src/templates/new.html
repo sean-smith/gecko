@@ -6,7 +6,6 @@
 	<title>Gecko</title>
 	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 	<link href="css/lib/chart.css" rel="stylesheet">
-</script>
 </head>
 <body>
 
@@ -70,19 +69,27 @@
 	</div>
 	<div class="row">
 		<div class="col-md-8 offset-md-2 text-center"> 
-			<div class="header">Total Cost</div>
+			<div class="header">Cost</div>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-4 offset-md-2 left text-center">
-			<div class="big">
-				Cost $ {{ user.total_cost | int }} 
+			<div class="big" style = "font-size:72px">
+				Total <br>$ {{ user.total_cost | round(2) }} 
+			</div>
+		</div>
+		<div class="col-md-4 text-center">
+			<div class="big" style = "font-size:72px">
+				Average <br>$ {{ (user.total_cost/user.trips.count) | round(2) }} 
 			</div>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-8 offset-md-2">
 			{% include 'barchart.html' %}
+		</div>
+		<div class="col-md-8 offset-md-2">
+			{% include 'scatter.html' %}
 		</div>
 		<script type="text/javascript" src="js/lib/chart.js"></script>
 	</div>
