@@ -3,7 +3,7 @@
 
 
 <style>
-
+/*
 .chart rect {
   fill: #57BB41;
 }
@@ -12,9 +12,9 @@
   fill: white;
   font: 10px sans-serif;
   text-anchor: end;
-}
+}*/
 
-/*.bar {
+.bar {
   fill: #57BB41;
 }
 
@@ -31,11 +31,11 @@
 
 .x.axis path {
   display: none;
-}*/
+}
 
 </style>
 <svg class="chart"></svg>
-<script type="text/javascript" src="js/lib/d3.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script>
 var data = [
 	{name: "January", value:  5.6},
@@ -52,130 +52,63 @@ var data = [
 	{name: "December", value: 26}
 ];
 
-// var margin = {top: 20, right: 20, bottom: 30, left: 40},
-//     width = 960 - margin.left - margin.right,
-//     height = 500 - margin.top - margin.bottom;
+var margin = {top: 20, right: 30, bottom: 20, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
-// var x = d3.scaleBand()
-//     .rangeRound([0, width], .1);
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .1);
 
-// var y = d3.scaleLinear()
-//     .range([height, 0]);
-
-// var xAxis = d3.svg.axis()
-//     .scale(x)
-//     .orient("bottom");
-
-// var yAxis = d3.svg.axis()
-//     .scale(y)
-//     .orient("left");
-
-// var svg = d3.select("body").append("svg")
-//     .attr("width", width + margin.left + margin.right)
-//     .attr("height", height + margin.top + margin.bottom)
-//   .append("g")
-//     .attr("transform",
-//           "translate(" + margin.left + "," + margin.top + ")");
-
-
-//   svg.append("g")
-//       .attr("transform", "translate(0," + height + ")")
-//       .call(d3.axisBottom(x));
-
-//   svg.append("text")             
-//       .attr("transform",
-//             "translate(" + (width/2) + " ," + 
-//                            (height + margin.top + 20) + ")")
-//       .style("text-anchor", "middle")
-//       .text("Date");
-
-// var chart = d3.select(".chart")
-//     .attr("width", width + margin.left + margin.right)
-//     .attr("height", height + margin.top + margin.bottom)
-//   .append("g")
-//     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-//   x.domain(data.map(function(d) { return d.name; }));
-//   y.domain([0, d3.max(data, function(d) { return d.value; })]);
-
-//   chart.append("g")
-//       .attr("class", "x axis")
-//       .attr("transform", "translate(0," + height + ")")
-//       .call(xAxis);
-
-//   chart.append("g")
-//       .attr("class", "y axis")
-//       .call(yAxis);
-
-//   chart.selectAll(".bar")
-//       .data(data)
-//     .enter().append("rect")
-//       .attr("class", "bar")
-//       .attr("x", function(d) { return x(d.name); })
-//       .attr("y", function(d) { return y(d.value); })
-//       .attr("height", function(d) { return height - y(d.value); })
-//       .attr("width", x.rangeBand());
-
-
-// function type(d) {
-//   d.value = +d.value; // coerce to number
-//   return d;
-// }
-
-var margin = {top: 20, right: 30, bottom: 30, left: 40},
-    width = 600,
-    height = 500;
-
-var y = d3.scaleLinear()
+var y = d3.scale.linear()
     .range([height, 0]);
 
-var x = d3.scaleBand()
-    .rangeRound([0, width], .1);
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
 
-var svg = d3.select("body").append("svg")
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var chart = d3.select(".chart")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-
-  svg.append("g")
-      .attr("transform", "translate(0," + 10 + ")") //height
-      .call(d3.axisBottom(x));
-
-  svg.append("text")             
-      .attr("transform",
-            "translate(" + (width/2) + " ," + 
-                           (10) + ")") //height
-      .style("text-anchor", "middle")
-      .text("Date");
-
-
-var chart = d3.select(".chart")
-    .attr("width", width)
-    .attr("height", height);
-
-
+  x.domain(data.map(function(d) { return d.name; }));
   y.domain([0, d3.max(data, function(d) { return d.value; })]);
 
-  var barWidth = width / data.length;
 
-  var bar = chart.selectAll("g")
+  chart.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+ // var barWidth = width / data.length;
+
+ //  chart.selectAll(".bar")
+ //      .data(data)
+ //    .enter().append("text")
+ //      .attr("class", "bar")
+ //      .attr("x", barWidth / 2)
+ //      .attr("y", function(d) { return y(d.value) + 3; })
+ //      .attr("dy", ".75em")
+ //      .attr("height", function(d) { return height - y(d.value); })
+ //      .attr("width", x.rangeBand());
+ //      .text(function(d) { return d.value; });
+
+
+  chart.selectAll(".bar")
       .data(data)
-    .enter().append("g")
-      .attr("transform", function(d, i) { return "translate(" + i * barWidth + ",0)"; });
-
-  bar.append("rect")
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.name); })
       .attr("y", function(d) { return y(d.value); })
       .attr("height", function(d) { return height - y(d.value); })
-      .attr("width", barWidth - 1);
-
-  bar.append("text")
-      .attr("x", barWidth / 2)
-      .attr("y", function(d) { return y(d.value) + 3; })
-      .attr("dy", ".75em")
-      .text(function(d) { return d.value; });
+      // .attr("dy", ".75em")
+      // .text(function(d) { return d.value; });
+      .attr("width", x.rangeBand());
 
 function type(d) {
   d.value = +d.value; // coerce to number
