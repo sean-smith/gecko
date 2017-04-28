@@ -2,11 +2,20 @@ const request = require('request-promise')
 const User = require('../models/user')
 const Products = require('../models/products')
 const get_cost = require('./cost_calculator')
+var timezoneJS = require("timezone-js");
+var tzdata = require("tzdata");
+
+// Time Zone shit (Who knew Time Zones were so complex!!!)
+var _tz = timezoneJS.timezone;
+_tz.loadingScheme = _tz.loadingSchemes.MANUAL_LOAD;
+_tz.loadZoneDataFromObject(tzdata);
+
 
 function real_time(utc){
 	var d = new Date(0);
 	d.setUTCSeconds(utc);
-	return d
+	var dtz = new timezoneJS.Date(d, 'America/New_York');
+	return dtz
 }
 
 function getRideDetails(req, next) {
@@ -14,11 +23,8 @@ function getRideDetails(req, next) {
 	var total_cost = 0
 	var index = 0
 
-	// Done array makes sure everything is done before continuing
-	var done = [];  
-	for (var i = 0; i < req.user.trips.history.length; i++) {
-		done.push(false)
-	}
+	// Done counter
+	var done = 0
 
 	req.user.trips.history.forEach(function (ride, index) {
 		dist += ride.distance
@@ -26,19 +32,17 @@ function getRideDetails(req, next) {
 			req.user.trips.history[index].description = description
 			var cost = get_cost.cost_calculator(description.display_name, ride.start_time, ride.end_time, ride.distance)
 			// Convert Time
-			req.user.trips.history[index].date_time = real_time(ride.start_time)
+			req.user.trips.history[index].date_time = real_time(ride.request_time)
+
+			// Get Duration
+			req.user.trips.history[index].duration = (ride.end_time - ride.start_time)
+
 			// Get Cost
 			req.user.trips.history[index].cost = cost
 			total_cost += cost
 
-			done[index] = true
-			var terminate = true
-			for (var i = 0; i < done.length; i++) {
-				if (!done[i]) {
-					terminate = false
-				}
-			}
-			if (terminate) {
+			// Finish when we complete everything
+			if (++done == req.user.trips.history.length) {
 				req.user.total_distance = dist
 				req.user.total_cost = total_cost
 				console.log(total_cost)
@@ -50,12 +54,7 @@ function getRideDetails(req, next) {
 
 function getProductsDescriptionAPI(req, ride, next) {
 
-	var params = {
-		'latitude': ride.start_city.latitude, 
-		'longitude': ride.start_city.longitude
-	}
-
-	api('v1.2/products', params, req.user.access_token, function(products) {
+	api(`v1.2/products/${ride.product_id}`, {}, req.user.access_token, function(products) {
 		return next(products)
 	})
 }
@@ -65,41 +64,19 @@ function getProductsDescription(req, ride, next) {
 	Products.findOne({'product_id': ride.product_id}, function (err, product) {
 
 		// If product in db return it
-		if (product) {
-			return next(product)
-		}
+		// if (product) {
+		// 	return next(product)
+		// }
 
 		// Make an API request
-		getProductsDescriptionAPI(req, ride, function(products) {
+		getProductsDescriptionAPI(req, ride, function(product) {
 
 			// Return Product
-			var product = products.products.find(function(x) {
-				return (x.product_id == ride.product_id)
-			})
-
-			// If product doesn't exist default to uberX
-			if (product == null) {
-				product = {
-					"product_id" : "8b7c2f47-bfcf-4ca5-ac51-263e61c38562", 
-					"description" : "THE LOW-COST UBER", 
-					"product_group" : "uberx", 
-					"display_name" : "uberX", 
-					"short_description" : "uberX", 
-					"shared" : false,
-					"cash_enabled" : false,
-					"image" : "http://d1a3f4spazzrp4.cloudfront.net/car-types/mono/mono-uberx.png", 
-					"capacity" : 4, 
-					"upfront_fare_enabled" : true
-				}
-			}
-
 			next(product)
 
 			// Insert into DB
-			products.products.forEach(function(product, i) {
-				Products.update({'product_id': product.product_id}, product, {upsert: true, setDefaultsOnInsert: true}, function(err, num) {
+			Products.update({'product_id': product.product_id}, product, {upsert: true, setDefaultsOnInsert: true}, function(err, num) {
 					if (err) console.log(err)
-				})
 			})
 		})
 	})

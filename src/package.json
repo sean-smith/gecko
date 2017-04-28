@@ -28,7 +28,9 @@
     "passport": "^0.3.2",
     "passport-uber-v2": "^0.1.1",
     "request": "^2.81.0",
-    "request-promise": "^4.2.0"
+    "request-promise": "^4.2.0",
+    "timezone-js": "^0.4.13",
+    "tzdata": "^1.0.7"
   },
   "devDependencies": {
     "nunjucks-date-filter": "^0.1.1"
