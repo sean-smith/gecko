@@ -38,7 +38,7 @@ function cost_calculator(service, start_time, end_time, miles){
 		cost_p_mile = 4.25
 		booking_fee = 0.0
 	}
-	else if (service == "uberPOOL"){
+	else if (service == "uberPOOL" || service == "POOL"){
 		base_fare = 1.5
 		min_fare = 2.75
 		cost_p_min = 0.10
