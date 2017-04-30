@@ -5,14 +5,32 @@ module.exports = function (app, passport) {
 	app.get('/', function (req, res) {
 		if (req.isAuthenticated()) {
 			uber.getRideData(req, res, function(req, res) {
-				res.render('new.html', {'user': req.user})
+				res.render('index.html', {'user': req.user})
 			})
 		} else {
-			res.render('new.html')
+			res.render('login.html')
 		}
 	})
 
-	app.get('/login', passport.authenticate('uber', {scope: ['profile', 'history', 'request_receipt']}), function(req, res) {
+	app.get('/profile', function (req, res) {
+		if (req.isAuthenticated()) {
+			uber.getRideData(req, res, function(req, res) {
+				res.render('profile.html', {'user': req.user})
+			})
+		} else {
+			res.redirect('/')
+		}
+	})
+
+	app.get('/day_of_week', function(req, res) {
+		uber.getWeekData(req, res)
+	})
+
+	app.get('/day_of_month', function(req, res) {
+		uber.getMonthData(req, res)
+	})
+
+	app.get('/login', passport.authenticate('uber', {scope: ['profile', 'history', 'request_receipt', 'all_trips']}), function(req, res) {
 		res.redirect('/')
 	})
 

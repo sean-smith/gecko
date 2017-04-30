@@ -1,74 +1,120 @@
 <!DOCTYPE html>
 <html>
-{% include 'head.njk' %}
 
+<head>
+	{% include './partials/head.html' %}
+	<title>Gecko</title>
+	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+	<link href="css/lib/chart.css" rel="stylesheet">
+</head>
 <body>
-	<!-- Navbar -->
-	<nav class="navbar navbar-default">
-		<div class="container-fluid">
-			<div class="navbar-header">
-			  <a class="navbar-brand" href="index.html">Uber Impact</a>
-			</div>
 
-			<!-- Collect the nav links, forms, and other content for toggling -->
-			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-				<ul class="nav navbar-nav">
-				</ul>
-					<ul class="nav navbar-nav navbar-right">
-				    	{% if profile_pic %}
-				    		<li><img src="{{ profile_pic }}" style="width:50px;height:50px;"></li>
-				    	{% endif %}
-				    	{% if name %}
-				   			<li><p>{{ name }}</p></li>
-				   			<li><a class="logout" href="/logout">Logout</a></li>
-						{% else %}
-				    		<li><a class="login" href="/login">Login</a></li>
-						{% endif %}
-					</ul>
-			</div>
+<style type="text/css">
+	body {
+		font-family: 'Montserrat', sans-serif;
+	}
+	.big {
+		font-size: 72px;
+		margin-left: auto;
+	}
+	.header {
+		font-size: 50px;
+		border-bottom: 1px solid #999;
+		margin: 0 0 20px 0;
+		padding: 0 0 5px 0;  
+		font-weight: normal;
+		color: #333;
+		text-align: center;
+	}
+	.left {
+		border-right: solid;
+	}
+	.trip {
+		background-color: #f5f5f5;
+		margin-top: 5px;
+		margin-bottom: 5px;
+		border-radius: 5px;
+		border-width: 1px;
+		border-color: #000;
+		padding:20px;
+	}
+</style>
+
+	{% if user %}
+	<div class="row">
+		<div class="col-md-4">
+			<h1 class="header">Hi {{user.first_name}}</h1>
 		</div>
-	</nav>
-
-	{% if not name %}
-		<div class="notLoggedIn">
-			<ul style="list-style-type:none">
-				<li><h1>Sorry, you are not logged in!</h1></li>
-				<li><h3>Please click login to access your Uber environmental impact profile</h3></li>
-	 		</ul>
+		<div class="col-md-4"></div>
+		<div class="col-md-4">
+			<a href="/logout"><h1 class="header">Logout</h1></a>
 		</div>
-	{% else %}
-
-
-	<div class="page">
-		<div class="container">
-			<div class="jumbotron" >
-				  <h1 class="title" style="margin-left: 30px;">Summary</h1>
-				  <p>...</p>
-			</div>
-		</div>
-
-
-		<div class="container">
-			<div class="jumbotron">
-			  <h1 class="title" style="margin-left: 30px;">Trip on (blank)</h1>
-			  <p>...</p>
-			</div>
-		</div>
-
-		<div class="container">
-			<div class="jumbotron">
-			  <h1 class="title" style="margin-left: 30px;">Trip on (blank)</h1>
-			  <p>...</p>
-			</div>
-		</div>
-
-		<div class="container">
-			<ul style="list-style-type:none">
-				<li><img src="http://www.conceptdraw.com/How-To-Guide/picture/Percentage-pie-chart-DA-determinations.png" style="width:500px;height:300px;"></li>
-			</ul>
-		</div>
-		
 	</div>
- {% endif %}
+	<div class="row">
+		<div class="col-md-8 offset-md-2 text-center"> 
+			<div class="header">Total Trips</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4 offset-md-2 left text-center">
+			<div class="big">
+				{{ user.trips.count }} Trips
+			</div>
+		</div>
+		<div class="col-md-4 text-center">
+			<div class="big">
+				{{user.total_distance | int }} Miles
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-8 offset-md-2 text-center"> 
+			<div class="header">Cost</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4 offset-md-2 left text-center">
+			<div class="big" style = "font-size:72px">
+				Total <br>$ {{ user.total_cost | round(2) }} 
+			</div>
+		</div>
+		<div class="col-md-4 text-center">
+			<div class="big" style = "font-size:72px">
+				Average <br>$ {{ (user.total_cost/user.trips.count) | round(2) }} 
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-8 offset-md-2">
+			{% include 'barchart.html' %}
+		</div>
+		<script type="text/javascript" src="js/lib/chart.js"></script>
+	</div>
+	{% for trip in user.trips.history %}
+	<div class="row">
+		<div class="col-md-8 offset-md-2 trip">
+			<h1>{{ trip.start_city.display_name }} Trip</h1>
+			<div class="row">
+				<div class="col-md-2">
+					<img src="{{ trip.description.image }}">
+				</div>
+				<div class="col-md-10">
+					<p>You travelled {{ trip.distance | round(2) }} miles.</p>
+					<p>On {{ trip.date_time | date('MMMM Do YYYY, h:mm a') }}.</p>
+					<p>The trip lasted {{ trip.duration }}.</p>
+					<p>The trip cost <span style="color:green;">${{ trip.cost | round(2) }}</span>.</p>
+					<p>You took a {{ trip.description.display_name }} product.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% else %}
+					<h1>No Trip Data!</h1>
+	{% endfor %}
+	{% else %}
+		<h1 style="font-size: 200px">Please <a href="/login">Login</a></h1>
+	{% endif %}
+
+
 </body>
 </html>

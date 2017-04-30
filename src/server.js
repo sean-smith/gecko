@@ -21,6 +21,7 @@ app.use(express.static('public'))
 app.use('/img', express.static(path.join(__dirname, 'public/img')))
 app.use('/js', express.static(path.join(__dirname, 'public/js')))
 app.use('/css', express.static(path.join(__dirname, 'public/css')))
+app.use('/movie', express.static(path.join(__dirname, 'public/movie')))
 
 // Session Configuration
 app.use(session({ secret: "supersecretsession" }))

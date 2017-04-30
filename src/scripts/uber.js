@@ -2,8 +2,9 @@ const request = require('request-promise')
 const User = require('../models/user')
 const Products = require('../models/products')
 const get_cost = require('./cost_calculator')
-var timezoneJS = require("timezone-js");
-var tzdata = require("tzdata");
+var timezoneJS = require("timezone-js")
+var tzdata = require("tzdata")
+var moment = require('moment-timezone');
 
 // Time Zone shit (Who knew Time Zones were so complex!!!)
 var _tz = timezoneJS.timezone;
@@ -12,10 +13,9 @@ _tz.loadZoneDataFromObject(tzdata);
 
 
 function real_time(utc){
-	var d = new Date(0);
-	d.setUTCSeconds(utc);
-	var dtz = new timezoneJS.Date(d, 'America/New_York');
-	return dtz
+	var d = new Date(0)
+	d.setUTCSeconds(utc)
+	return new timezoneJS.Date(d, 'America/New_York');
 }
 
 function getRideDetails(req, next) {
@@ -26,16 +26,30 @@ function getRideDetails(req, next) {
 	// Done counter
 	var done = 0
 
+	req.user.days_of_week = [0,0,0,0,0,0,0]
+	req.user.months_of_year = [0,0,0,0,0,0,0,0,0,0,0,0]
+
 	req.user.trips.history.forEach(function (ride, index) {
+
+		// Distance in Miles
 		dist += ride.distance
+
+		// Set month
+		var date = real_time(ride.request_time)
+		req.user.months_of_year[date.getMonth()] += ride.distance
+
+		// Set day of week
+		req.user.days_of_week[date.getDay()] += ride.distance
+
+		// Convert Time
+		req.user.trips.history[index].date_time = date
+
 		getProductsDescription(req, ride, function(description) {
 			req.user.trips.history[index].description = description
 			var cost = get_cost.cost_calculator(description.display_name, ride.start_time, ride.end_time, ride.distance)
-			// Convert Time
-			req.user.trips.history[index].date_time = real_time(ride.request_time)
 
-			// Get Duration
-			req.user.trips.history[index].duration = (ride.end_time - ride.start_time)
+			// Get Duration as human readable string
+			req.user.trips.history[index].duration = moment.duration(ride.end_time - ride.start_time, 'seconds').humanize()
 
 			// Get Cost
 			req.user.trips.history[index].cost = cost
@@ -94,32 +108,35 @@ function getRidesAPI(req, next) {
 
 function getRideData(req, res, next) {
 
-	/*
 	// Check if already set in session obj
 	if (req.user.trips && req.user.total_distance) {
 		return next(req, res)
 	}
-*/
+
 	// Look for info in DB
 	User.findById(req.user.id, function (err, user) {
 
-/*
 		// If it's there return it
 		if (user.trips && user.total_distance) {
 			req.user.trips = user.trips
 			req.user.total_distance = user.total_distance
 			return next(req, res)
 		}
-*/
+
 		// Otherwise fetch it from API
 		getRidesAPI(req, function(req) {
 
+			console.log(req.user.months_of_year)
+
 			// Now save in DB
-			User.update({ _id: req.user.id }, { 
-				$set: { 
-					'trips': req.user.trips, 
+			User.update({ '_id': req.user.id }, 
+			{ '$set':
+				{
+					// 'trips': req.user.trips, 
 					'total_distance': req.user.total_distance, 
-					'total_cost': req.user.total_cost
+					'total_cost': req.user.total_cost,
+					'months_of_year': req.user.months_of_year,
+					'days_of_week': req.user.days_of_week
 				}
 			}, function(err) {
 				if (err) console.log(err)
@@ -152,7 +169,58 @@ function api(endpoint, params, access_token, next) {
 	})
 }
 
+function getMonthData(req, res) {
+
+	User.findById(req.user.id, function (err, result) {
+
+		if (err) console.log(err)
+
+		console.log(result)
+
+		var week = result.months_of_year
+
+		res.send([
+			{name: "January", value:  week[0]},
+			{name: "February", value:  week[1]},
+			{name: "March", value: week[2]},
+			{name: "April", value: week[3]},
+			{name: "May", value: week[4]},
+			{name: "June", value: week[5]},
+			{name: "July", value:  week[6]},
+			{name: "August", value: week[7]},
+			{name: "September", value: week[8]},
+			{name: "October", value: week[9]},
+			{name: "November", value:  week[10]},
+			{name: "December", value:  week[11]}
+  		])
+	})
+}
+
+
+function getWeekData(req, res) {
+
+	User.findById(req.user.id, function (err, result) {
+
+		if (err) console.log(err)
+
+		console.log(result)
+
+		var week = result.days_of_week
+
+		res.send([
+			{name: "Monday", value:  week[0]},
+			{name: "Tuesday", value:  week[1]},
+			{name: "Wednesday", value: week[2]},
+			{name: "Thursday", value: week[3]},
+			{name: "Friday", value: week[4]},
+			{name: "Saturday", value: week[5]},
+			{name: "Sunday", value:  week[6]}
+  		])
+	})
+}
+
 
 module.exports = {
-	getRideData: getRideData
+	getRideData: getRideData,
+	getWeekData: getWeekData
 }
