@@ -3,11 +3,10 @@
 	{% block body %}
 		{% if user %}
 		
-			{% include "partials/summary.html" %}
+			{% include "partials/trips.html" %}
 
 		{% else %}
 			<h1 style="font-size: 200px">Please <a href="/login">Login</a></h1>
 		{% endif %}
 	{% endblock %}
-
 

@@ -1,0 +1,21 @@
+{% for trip in user.trips.history %}
+<div class="row">
+	<div class="col-md-8 offset-md-2 trip">
+		<h1>{{ trip.start_city.display_name }} Trip</h1>
+		<div class="row">
+			<div class="col-md-2">
+				<img src="{{ trip.description.image }}">
+			</div>
+			<div class="col-md-10">
+				<p>You travelled {{ trip.distance | round(2) }} miles.</p>
+				<p>On {{ trip.date_time | date('MMMM Do YYYY, h:mm a') }}.</p>
+				<p>The trip lasted {{ trip.duration }}.</p>
+				<p>The trip cost <span style="color:green;">${{ trip.cost | round(2) }}</span>.</p>
+				<p>You took a {{ trip.description.display_name }} product.</p>
+			</div>
+		</div>
+	</div>
+</div>
+{% else %}
+				<h1>No Trip Data!</h1>
+{% endfor %}

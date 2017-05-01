@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	{% include 'partials/head.html' %}
+	<title>Gecko</title>
+	<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+	<link href="css/lib/chart.css" rel="stylesheet">
+</head>
+<body>
+
+<style type="text/css">
+	body {
+		font-family: 'Montserrat', sans-serif;
+	}
+	.big {
+		font-size: 72px;
+		margin-left: auto;
+	}
+	.header {
+		font-size: 50px;
+		border-bottom: 1px solid #999;
+		margin: 0 0 20px 0;
+		padding: 0 0 5px 0;  
+		font-weight: normal;
+		color: #333;
+		text-align: center;
+	}
+	.left {
+		border-right: solid;
+	}
+	.trip {
+		background-color: #f5f5f5;
+		margin-top: 5px;
+		margin-bottom: 5px;
+		border-radius: 5px;
+		border-width: 1px;
+		border-color: #000;
+		padding:20px;
+	}
+</style>
+
+<!-- Nav Bar -->
+<div class="row">
+	<div class="col-md-4">
+		<h1 class="header">Hi {{user.first_name}}</h1>
+	</div>
+	<div class="col-md-4 offset-md-4">
+		<a href="/logout"><h1 class="header">Logout</h1></a>
+	</div>
+</div>
+
+
+<!-- Navigation -->
+<div class="row">
+	<div class="col-md-3">
+		<a href="/"><h1 class="header">Summary</h1>
+	</div>
+	<div class="col-md-3">
+		<a href="/chart?endpoint=day_of_week"><h1 class="header">Day of Week</h1></a>
+	</div>
+	<div class="col-md-3">
+		<a href="/chart?endpoint=month_of_year"><h1 class="header">Month of Year</h1></a>
+	</div>
+	<div class="col-md-3">
+		<a href="/trips"><h1 class="header">Trips</h1></a>
+	</div>
+</div>
+
+{% block body %}{% endblock %}
+
+
+</body>
+</html>

@@ -60,7 +60,7 @@ var chart = d3.select(".chart")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-$.get('/day_of_week', function(data) {
+$.get('{{ endpoint }}', function(data) {
 
 
   x.domain(data.map(function(d) { return d.name; }));

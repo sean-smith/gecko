@@ -26,6 +26,7 @@ function getRideDetails(req, next) {
 	// Done counter
 	var done = 0
 
+	// Initialize day of week and months of year
 	req.user.days_of_week = [0,0,0,0,0,0,0]
 	req.user.months_of_year = [0,0,0,0,0,0,0,0,0,0,0,0]
 
@@ -38,13 +39,15 @@ function getRideDetails(req, next) {
 		var date = real_time(ride.request_time)
 		req.user.months_of_year[date.getMonth()] += ride.distance
 
-		// Set day of week
+		// Set Day of Week
 		req.user.days_of_week[date.getDay()] += ride.distance
 
 		// Set Time
 		req.user.trips.history[index].date_time = date
 
 		getProductsDescription(req, ride, function(description) {
+
+			// Set Product Description (like uberPool, uberX ect.)
 			req.user.trips.history[index].description = description
 			var cost = get_cost.cost_calculator(description.display_name, ride.start_time, ride.end_time, ride.distance)
 
@@ -125,13 +128,10 @@ function getRideData(req, res, next) {
 		// Otherwise fetch it from API
 		getRidesAPI(req, function(req) {
 
-			console.log(req.user.months_of_year)
-
 			// Now save in DB
-			User.update({ '_id': req.user.id }, 
-			{ '$set':
-				{
-					// 'trips': req.user.trips, 
+			User.update({ '_id': req.user.id }, {
+				$set: {
+					'trips': req.user.trips,
 					'total_distance': req.user.total_distance, 
 					'total_cost': req.user.total_cost,
 					'months_of_year': req.user.months_of_year,
@@ -219,5 +219,6 @@ function getWeekData(req, res) {
 
 module.exports = {
 	getRideData: getRideData,
-	getWeekData: getWeekData
+	getWeekData: getWeekData,
+	getMonthData: getMonthData
 }
