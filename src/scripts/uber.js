@@ -107,9 +107,18 @@ function getRidesAPI(req, next) {
 	// Get History
 	api('v1.2/history', {'limit': 50}, req.user.access_token, function(rides) {
 		req.user.trips = rides
-		getRideDetails(req, function(req) {
-			return next(req)
-		})
+		var total = Math.ceil(rides.count / 50)
+		var count = 1
+		for (var i = 1; i < total; i++) {
+			api('v1.2/history', {'limit': 50, 'offset': i*50}, req.user.access_token, function(rides) {
+				req.user.trips.history.push.apply(req.user.trips.history, rides.history)
+				if (++count == total) {
+					getRideDetails(req, function(req) {
+						return next(req)
+					})
+				}
+			})
+		}
 	})
 }
 
