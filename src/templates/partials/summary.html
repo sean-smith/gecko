@@ -25,12 +25,12 @@
 </div>
 <div class="row">
 	<div class="col-md-4 offset-md-2 left text-center">
-		<div class="big" style = "font-size:72px">
+		<div class="big">
 			Total <br><span style="color:green;">$ {{ user.total_cost | round(2) }}</span>
 		</div>
 	</div>
 	<div class="col-md-4 text-center">
-		<div class="big" style = "font-size:72px">
+		<div class="big">
 			Average <br><span style="color:green;">$ {{ (user.total_cost/user.trips.count) | round(2) }}</span>
 		</div>
 	</div>
