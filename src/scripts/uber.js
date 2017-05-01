@@ -80,9 +80,9 @@ function getProductsDescription(req, ride, next) {
 	Products.findOne({'product_id': ride.product_id}, function (err, product) {
 
 		// If product in db return it
-		// if (product) {
-		// 	return next(product)
-		// }
+		if (product) {
+			return next(product)
+		}
 
 		// Make an API request
 		getProductsDescriptionAPI(req, ride, function(product) {
@@ -111,19 +111,19 @@ function getRidesAPI(req, next) {
 function getRideData(req, res, next) {
 
 	// Check if already set in session obj
-	// if (req.user.trips && req.user.total_distance) {
-	// 	return next(req, res)
-	// }
+	if (req.user.trips && req.user.total_distance) {
+		return next(req, res)
+	}
 
 	// Look for info in DB
 	User.findById(req.user.id, function (err, user) {
 
 		// If it's there return it
-		// if (user.trips && user.total_distance) {
-		// 	req.user.trips = user.trips
-		// 	req.user.total_distance = user.total_distance
-		// 	return next(req, res)
-		// }
+		if (user.trips && user.total_distance) {
+			req.user.trips = user.trips
+			req.user.total_distance = user.total_distance
+			return next(req, res)
+		}
 
 		// Otherwise fetch it from API
 		getRidesAPI(req, function(req) {
