@@ -74,7 +74,7 @@ module.exports = function (app, passport) {
 		uber.getMapData(req, res)
 	})
 
-	app.get('/login', passport.authenticate('uber', {scope: ['profile', 'history', 'request_receipt', 'all_trips']}), function(req, res) {
+	app.get('/login', passport.authenticate('uber', {scope: ['profile', 'history']}), function(req, res) {
 		res.redirect('/')
 	})
 
