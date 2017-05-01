@@ -116,19 +116,19 @@ function getRidesAPI(req, next) {
 function getRideData(req, res, next) {
 
 	// Check if already set in session obj
-	// if (req.user.trips && req.user.total_distance) {
-	// 	return next(req, res)
-	// }
+	if (req.user.trips && req.user.total_distance) {
+		return next(req, res)
+	}
 
 	// Look for info in DB
 	User.findById(req.user.id, function (err, user) {
 
 		// If it's there return it
-		// if (user.trips && user.total_distance) {
-		// 	req.user.trips = user.trips
-		// 	req.user.total_distance = user.total_distance
-		// 	return next(req, res)
-		// }
+		if (user.trips && user.total_distance) {
+			req.user.trips = user.trips
+			req.user.total_distance = user.total_distance
+			return next(req, res)
+		}
 
 		// Otherwise fetch it from API
 		getRidesAPI(req, function(req) {
@@ -228,9 +228,16 @@ function getMapData(req, res) {
 
 		var locations = result.locations
 
-		console.log(locations)
-
 		res.send(locations)
+	})
+}
+
+function deleteUser(req, res, next) {
+	User.findByIdAndRemove(req.user.id, function (err) {
+
+		if (err) console.log(err)
+
+		next(req, res)
 	})
 }
 
@@ -239,5 +246,6 @@ module.exports = {
 	getRideData: getRideData,
 	getWeekData: getWeekData,
 	getMonthData: getMonthData,
-	getMapData: getMapData
+	getMapData: getMapData,
+	deleteUser: deleteUser
 }

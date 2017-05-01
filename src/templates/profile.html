@@ -3,10 +3,16 @@
 	{% block body %}
 		{% if user %}
 		
-			<div class="row">
-				<div class="col-md-4 offset-md-4 well">
-					<img src="{{ user.picture }}" class="thumbnail">
-					<a href="/venmo_login" class="btn btn-success">Link Venmo</a>
+			<div class="container">
+				<div class="col-md-4 offset-md-4">
+					<div class="thumbnail">
+						<img src="{{ user.picture }}" width="200px">
+						<div class="caption">
+							<h3>{{ user.first_name }} {{ user.last_name }}</h3>
+							<p>{{ user.email }}</p>
+							<p><a href="/delete" class="btn btn-danger" role="button">Delete Account</a></p>
+						</div>
+					</div>
 				</div>
 			</div>
 

@@ -52,6 +52,16 @@ module.exports = function (app, passport) {
 		}
 	})
 
+	app.get('/delete', function (req, res) {
+		if (req.isAuthenticated()) {
+			uber.deleteUser(req, res, function() {
+				res.redirect('/')
+			})
+		} else {
+			res.redirect('/')
+		}
+	})
+
 	app.get('/day_of_week', function(req, res) {
 		uber.getWeekData(req, res)
 	})
