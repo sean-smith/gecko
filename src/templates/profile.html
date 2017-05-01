@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+	{% block body %}
+		{% if user %}
+		
+			<div class="row">
+				<div class="col-md-4 offset-md-4 well">
+					<img src="{{ user.picture }}" class="thumbnail">
+					<a href="/venmo_login" class="btn btn-success">Link Venmo</a>
+				</div>
+			</div>
+
+		{% else %}
+			<h1 style="font-size: 200px">Please <a href="/login">Login</a></h1>
+		{% endif %}
+	{% endblock %}

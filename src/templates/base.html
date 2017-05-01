@@ -12,6 +12,7 @@
 <style type="text/css">
 	body {
 		font-family: 'Montserrat', sans-serif;
+		/*background-color: #c0c0c8;*/
 	}
 	.big {
 		font-size: 72px;
@@ -19,7 +20,6 @@
 	}
 	.header {
 		font-size: 50px;
-		border-bottom: 1px solid #999;
 		margin: 0 0 20px 0;
 		padding: 0 0 5px 0;  
 		font-weight: normal;
@@ -43,7 +43,7 @@
 <!-- Nav Bar -->
 <div class="row">
 	<div class="col-md-4">
-		<h1 class="header">Hi {{user.first_name}}</h1>
+		<a href="/profile"><h1 class="header">Hi {{ user.first_name }}</h1></a>
 	</div>
 	<div class="col-md-4 offset-md-4">
 		<a href="/logout"><h1 class="header">Logout</h1></a>
@@ -53,13 +53,14 @@
 
 <!-- Navigation -->
 <div class="row">
-	<div class="col-md-8 offset-md-4 container">
-		<div class="btn-group" role="group" aria-label="Basic example">
+	<div class="col-md-4 offset-md-4">
+		<div class="btn-group btn-group-justified" role="group" aria-label="Basic example">
 			<a href="/" class="btn btn-success">Summary</a>
 			<a href="/chart?endpoint=day_of_week" class="btn btn-success">Day of Week</a>
 			<a href="/chart?endpoint=month_of_year" class="btn btn-success">Month of Year</a>
 			<a href="/trips" class="btn btn-success">Trips</a>
-  		</div>
+			<a href="/map" class="btn btn-success">Map</a>
+		</div>
   	</div>
 </div>
 

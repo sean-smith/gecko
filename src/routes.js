@@ -1,11 +1,11 @@
 const uber = require('./scripts/uber')
+const credentials = require('./credentials')
 
 // Setup all Routes
 module.exports = function (app, passport) {
 	app.get('/', function (req, res) {
 		if (req.isAuthenticated()) {
 			uber.getRideData(req, res, function(req, res) {
-				console.log('here!!!')
 				res.render('index.html', {'user': req.user})
 			})
 		} else {
@@ -34,12 +34,34 @@ module.exports = function (app, passport) {
 		}
 	})
 
+	app.get('/profile', function (req, res) {
+		if (req.isAuthenticated()) {
+			uber.getRideData(req, res, function(req, res) {
+				res.render('profile.html', {'user': req.user})
+			})
+		} else {
+			res.redirect('/')
+		}
+	})
+
+	app.get('/map', function (req, res) {
+		if (req.isAuthenticated()) {
+			res.render('map.html', {'user': req.user, 'api_key': credentials.api_key})
+		} else {
+			res.redirect('/')
+		}
+	})
+
 	app.get('/day_of_week', function(req, res) {
 		uber.getWeekData(req, res)
 	})
 
 	app.get('/month_of_year', function(req, res) {
 		uber.getMonthData(req, res)
+	})
+
+	app.get('/map_data', function(req, res) {
+		uber.getMapData(req, res)
 	})
 
 	app.get('/login', passport.authenticate('uber', {scope: ['profile', 'history', 'request_receipt', 'all_trips']}), function(req, res) {

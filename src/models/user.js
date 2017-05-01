@@ -13,6 +13,7 @@ var user = mongoose.Schema({
 	'total_distance': Number,
 	'total_money': Number,
 	'total_cost' : Number,
+	'locations': mongoose.Schema.Types.Mixed,
 	'trips': mongoose.Schema.Types.Mixed
 })
 

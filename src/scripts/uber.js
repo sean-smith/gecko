@@ -29,6 +29,7 @@ function getRideDetails(req, next) {
 	// Initialize day of week and months of year
 	req.user.days_of_week = [0,0,0,0,0,0,0]
 	req.user.months_of_year = [0,0,0,0,0,0,0,0,0,0,0,0]
+	locations = []
 
 	req.user.trips.history.forEach(function (ride, index) {
 
@@ -44,6 +45,9 @@ function getRideDetails(req, next) {
 
 		// Set Time
 		req.user.trips.history[index].date_time = date
+
+		// Set location
+		locations.push({lat: ride.start_city.latitude, lng:  ride.start_city.longitude})
 
 		getProductsDescription(req, ride, function(description) {
 
@@ -61,6 +65,7 @@ function getRideDetails(req, next) {
 			// Finish when we complete everything
 			if (++done == req.user.trips.history.length) {
 				req.user.total_distance = dist
+				req.user.locations = locations
 				req.user.total_cost = total_cost
 				return next(req)
 			}
@@ -111,19 +116,19 @@ function getRidesAPI(req, next) {
 function getRideData(req, res, next) {
 
 	// Check if already set in session obj
-	if (req.user.trips && req.user.total_distance) {
-		return next(req, res)
-	}
+	// if (req.user.trips && req.user.total_distance) {
+	// 	return next(req, res)
+	// }
 
 	// Look for info in DB
 	User.findById(req.user.id, function (err, user) {
 
 		// If it's there return it
-		if (user.trips && user.total_distance) {
-			req.user.trips = user.trips
-			req.user.total_distance = user.total_distance
-			return next(req, res)
-		}
+		// if (user.trips && user.total_distance) {
+		// 	req.user.trips = user.trips
+		// 	req.user.total_distance = user.total_distance
+		// 	return next(req, res)
+		// }
 
 		// Otherwise fetch it from API
 		getRidesAPI(req, function(req) {
@@ -135,7 +140,8 @@ function getRideData(req, res, next) {
 					'total_distance': req.user.total_distance, 
 					'total_cost': req.user.total_cost,
 					'months_of_year': req.user.months_of_year,
-					'days_of_week': req.user.days_of_week
+					'days_of_week': req.user.days_of_week,
+					'locations': req.user.locations
 				}
 			}, function(err) {
 				if (err) console.log(err)
@@ -173,8 +179,6 @@ function getMonthData(req, res) {
 	User.findById(req.user.id, function (err, result) {
 
 		if (err) console.log(err)
-
-		console.log(result)
 
 		var month = result.months_of_year
 
@@ -216,9 +220,24 @@ function getWeekData(req, res) {
 	})
 }
 
+function getMapData(req, res) {
+
+	User.findById(req.user.id, function (err, result) {
+
+		if (err) console.log(err)
+
+		var locations = result.locations
+
+		console.log(locations)
+
+		res.send(locations)
+	})
+}
+
 
 module.exports = {
 	getRideData: getRideData,
 	getWeekData: getWeekData,
-	getMonthData: getMonthData
+	getMonthData: getMonthData,
+	getMapData: getMapData
 }
