@@ -41,7 +41,7 @@ function getRideDetails(req, next) {
 		// Set day of week
 		req.user.days_of_week[date.getDay()] += ride.distance
 
-		// Convert Time
+		// Set Time
 		req.user.trips.history[index].date_time = date
 
 		getProductsDescription(req, ride, function(description) {
@@ -59,7 +59,6 @@ function getRideDetails(req, next) {
 			if (++done == req.user.trips.history.length) {
 				req.user.total_distance = dist
 				req.user.total_cost = total_cost
-				console.log(total_cost)
 				return next(req)
 			}
 		})
@@ -109,19 +108,19 @@ function getRidesAPI(req, next) {
 function getRideData(req, res, next) {
 
 	// Check if already set in session obj
-	if (req.user.trips && req.user.total_distance) {
-		return next(req, res)
-	}
+	// if (req.user.trips && req.user.total_distance) {
+	// 	return next(req, res)
+	// }
 
 	// Look for info in DB
 	User.findById(req.user.id, function (err, user) {
 
 		// If it's there return it
-		if (user.trips && user.total_distance) {
-			req.user.trips = user.trips
-			req.user.total_distance = user.total_distance
-			return next(req, res)
-		}
+		// if (user.trips && user.total_distance) {
+		// 	req.user.trips = user.trips
+		// 	req.user.total_distance = user.total_distance
+		// 	return next(req, res)
+		// }
 
 		// Otherwise fetch it from API
 		getRidesAPI(req, function(req) {
@@ -177,21 +176,21 @@ function getMonthData(req, res) {
 
 		console.log(result)
 
-		var week = result.months_of_year
+		var month = result.months_of_year
 
 		res.send([
-			{name: "January", value:  week[0]},
-			{name: "February", value:  week[1]},
-			{name: "March", value: week[2]},
-			{name: "April", value: week[3]},
-			{name: "May", value: week[4]},
-			{name: "June", value: week[5]},
-			{name: "July", value:  week[6]},
-			{name: "August", value: week[7]},
-			{name: "September", value: week[8]},
-			{name: "October", value: week[9]},
-			{name: "November", value:  week[10]},
-			{name: "December", value:  week[11]}
+			{name: "January", value:  month[0]},
+			{name: "February", value:  month[1]},
+			{name: "March", value: month[2]},
+			{name: "April", value: month[3]},
+			{name: "May", value: month[4]},
+			{name: "June", value: month[5]},
+			{name: "July", value:  month[6]},
+			{name: "August", value: month[7]},
+			{name: "September", value: month[8]},
+			{name: "October", value: month[9]},
+			{name: "November", value:  month[10]},
+			{name: "December", value:  month[11]}
   		])
 	})
 }
@@ -202,8 +201,6 @@ function getWeekData(req, res) {
 	User.findById(req.user.id, function (err, result) {
 
 		if (err) console.log(err)
-
-		console.log(result)
 
 		var week = result.days_of_week
 
