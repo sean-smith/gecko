@@ -38,10 +38,13 @@
 		border-color: #000;
 		padding:20px;
 	}
+	.top {
+		margin: 20px;
+	}
 </style>
 
 <!-- Nav Bar -->
-<div class="row">
+<div class="row top">
 	<div class="col-md-4">
 		<a href="/profile"><h1 class="header">Hi {{ user.first_name }}</h1></a>
 	</div>
@@ -52,7 +55,7 @@
 
 
 <!-- Navigation -->
-<div class="row">
+<div class="row top">
 	<div class="col-md-4 offset-md-4">
 		<div class="btn-group btn-group-justified" role="group" aria-label="Basic example">
 			<a href="/" class="btn btn-success">Summary</a>
