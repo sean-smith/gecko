@@ -8,7 +8,7 @@ module.exports = function (passport) {
 	passport.use(new uberStrategy({
 		clientID: credentials.client_id,
 		clientSecret: credentials.client_secret,
-		callbackURL: "http://localhost:8080/login/callback"
+		callbackURL: "https://gecko.seanssmith.com/login/callback"
 	},
 	function(accessToken, refreshToken, profile, done) {
 		
