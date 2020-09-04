@@ -24,7 +24,7 @@
     "express-session": "^1.15.2",
     "moment": "^2.18.1",
     "moment-timezone": "^0.5.13",
-    "mongodb": "^2.2.25",
+    "mongodb": "^3.6.1",
     "mongoose": "^5.9.11",
     "nunjucks": "^3.0.0",
     "passport": "^0.3.2",
